@@ -70,10 +70,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> findByPhone(User user) {
+    public List<User> findByPhoneOrUsername(User user) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         String phone = user.getPhone();
-        queryWrapper.eq(phone != null, User::getPhone, phone);
+        queryWrapper.eq(phone != null, User::getPhone, phone).or().eq(phone != null, User::getUsername, phone);
         List<User> users = userMapper.selectList(queryWrapper);
         return users.stream().map((item)->{
             item.setPassword("");

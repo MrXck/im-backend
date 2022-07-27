@@ -55,8 +55,8 @@ public class UserController {
     }
 
     @PostMapping("/find")
-    public R findByPhone(@RequestBody User user){
-        List<User> users = userService.findByPhone(user);
+    public R findByPhoneOrUsername(@RequestBody User user){
+        List<User> users = userService.findByPhoneOrUsername(user);
         return R.success(users);
     }
 

@@ -10,7 +10,7 @@ public interface UserService extends IService<User> {
 
     String register(User user);
 
-    List<User> findByPhone(User user);
+    List<User> findByPhoneOrUsername(User user);
 
     Integer checkToken(String token);
 
