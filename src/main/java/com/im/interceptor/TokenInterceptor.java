@@ -1,6 +1,7 @@
 package com.im.interceptor;
 
 import com.alibaba.druid.util.StringUtils;
+import com.im.entity.User;
 import com.im.service.UserService;
 import com.im.utils.NoAuthorization;
 import com.im.utils.UserThreadLocal;
@@ -37,7 +38,8 @@ public class TokenInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
         if(!StringUtils.isEmpty(token)){
             Integer userId = this.userService.checkToken(token);
-            if(null != userId){
+            User user = this.userService.getById(userId);
+            if(null != userId && user != null){
                 //把id放入本地线程中
                 UserThreadLocal.set(userId);
                 return true;
