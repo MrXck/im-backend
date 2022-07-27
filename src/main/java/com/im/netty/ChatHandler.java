@@ -28,11 +28,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     //用于记录和管理所有客户端的channel
-    private static ChannelGroup clients =
+    private static final ChannelGroup clients =
             new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    private static Map<Integer, Channel> USER_CHANNEL = new ConcurrentHashMap<>();
-    private static Map<Channel, Integer> CHANNEL_USER = new ConcurrentHashMap<>();
+    private static final Map<Integer, Channel> USER_CHANNEL = new ConcurrentHashMap<>();
+    private static final Map<Channel, Integer> CHANNEL_USER = new ConcurrentHashMap<>();
 
 
     //客户端创建的时候触发，当客户端连接上服务端之后，就可以获取该channel，然后放到channelGroup中进行统一管理
@@ -44,6 +44,11 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     //客户端销毁的时候触发，
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        Channel channel = ctx.channel();
+        Integer user_id = CHANNEL_USER.get(channel);
+        USER_CHANNEL.remove(user_id);
+        CHANNEL_USER.remove(channel);
+        super.handlerRemoved(ctx);
     }
 
     @Override

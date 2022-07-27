@@ -58,8 +58,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             if(phone == null || "".equals(phone)){
                 return "请输入手机号";
             }
-            if(avatar == null || "".equals(avatar)){
-                return "请上传头像";
+            if("".equals(avatar)){
+                user.setAvatar("/img/user.jpg");
             }
             user.setPassword(MD5Utils.md5(password));
             userMapper.insert(user);
@@ -100,11 +100,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String phone = user.getPhone();
         String synopsis = user.getSynopsis();
         updateWrapper.eq(User::getId, userId);
-        updateWrapper.set(username != null, User::getUsername, username);
-        updateWrapper.set(password != null, User::getPassword, MD5Utils.md5(password));
-        updateWrapper.set(avatar != null, User::getAvatar, avatar);
-        updateWrapper.set(phone != null, User::getPhone, phone);
-        updateWrapper.set(synopsis != null, User::getSynopsis, synopsis);
+        updateWrapper.set(username != null && !"".equals(username), User::getUsername, username);
+        updateWrapper.set(password != null && !"".equals(password), User::getPassword, MD5Utils.md5(password));
+        updateWrapper.set(avatar != null && !"".equals(avatar), User::getAvatar, avatar);
+        updateWrapper.set(phone != null && !"".equals(phone), User::getPhone, phone);
+        updateWrapper.set(synopsis != null && !"".equals(synopsis), User::getSynopsis, synopsis);
         userMapper.update(user1, updateWrapper);
         user1 = userMapper.selectById(userId);
         return user1;

@@ -29,9 +29,7 @@ public class UserController {
     @NoAuthorization
     @PostMapping("/login")
     public R login(@RequestBody User user){
-        System.out.println(user);
         User user1 = userService.login(user);
-        System.out.println(user1);
         if(user1 != null){
             user1.setPassword("");
             Map<String, Object> claims = new HashMap<>();
